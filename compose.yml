@@ -4,6 +4,7 @@
 
 services:
   browser-pool:
+    pull_policy: build
     build:
       context: .
       dockerfile: Dockerfile

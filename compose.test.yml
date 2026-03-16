@@ -5,6 +5,7 @@
 services:
   # Browser pool service (system under test)
   browser-pool:
+    pull_policy: build
     build:
       context: .
       dockerfile: Dockerfile
@@ -40,6 +41,7 @@ services:
 
   # Test runner container
   test-runner:
+    pull_policy: build
     build:
       context: .
       dockerfile: Dockerfile.test
