@@ -5,10 +5,10 @@ from typing import Any
 
 from airbrowser import __version__
 
+from ...vision.config import vision_is_enabled
 from ..browser_pool import BrowserPoolAdapter
 from .response import error as _error
 from .response import success as _success
-from ...vision.config import vision_is_enabled
 
 
 class PoolOperations:

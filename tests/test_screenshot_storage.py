@@ -1,10 +1,10 @@
 import errno
-import threading
-from pathlib import Path
-from types import SimpleNamespace
 import os
 import shutil
+import threading
 import time
+from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -297,7 +297,10 @@ def test_take_screenshot_raises_when_canonical_write_does_not_persist(monkeypatc
 def test_browser_service_prunes_screenshots_on_startup(monkeypatch):
     calls = []
     monkeypatch.setenv("ENABLE_SESSION_RESTORE", "false")
-    fake_prune = lambda: calls.append("called")
+
+    def fake_prune():
+        calls.append("called")
+
     monkeypatch.setattr(ipc_service_module, "prune_screenshots", fake_prune, raising=False)
     monkeypatch.setattr(screenshots, "prune_screenshots", fake_prune, raising=False)
 

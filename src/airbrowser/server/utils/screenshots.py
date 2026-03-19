@@ -1,12 +1,12 @@
 """Canonical screenshot lifecycle utilities."""
 
-from contextlib import contextmanager
 import errno
 import fcntl
 import os
 import shutil
 import threading
 import time
+from contextlib import contextmanager
 from pathlib import Path
 from urllib.parse import SplitResult, urlsplit, urlunsplit
 from uuid import uuid4
@@ -88,13 +88,12 @@ def _locked_screenshot_store(directory: Path):
     directory.mkdir(parents=True, exist_ok=True)
     lock_path = directory / SCREENSHOT_LOCK_FILENAME
 
-    with _SCREENSHOT_STORE_MUTEX:
-        with lock_path.open("a+b") as lock_file:
-            fcntl.flock(lock_file.fileno(), fcntl.LOCK_EX)
-            try:
-                yield
-            finally:
-                fcntl.flock(lock_file.fileno(), fcntl.LOCK_UN)
+    with _SCREENSHOT_STORE_MUTEX, lock_path.open("a+b") as lock_file:
+        fcntl.flock(lock_file.fileno(), fcntl.LOCK_EX)
+        try:
+            yield
+        finally:
+            fcntl.flock(lock_file.fileno(), fcntl.LOCK_UN)
 
 
 def _prune_screenshot_store(
